@@ -89,8 +89,7 @@
  *   $db_url = 'pgsql://username:password@localhost/databasename';
  */
 
-//$db_url = 'mysql://c2316382admin:password@mysql-c/c2316382_companysites';
-$db_url = 'mysqli://root:123456@localhost/drupal_demo';
+$db_url = 'mysql://c2316382admin:password@mysql-c/c2316382_companysites';
 
 $db_prefix = '';
 
@@ -261,12 +260,6 @@ ini_set('url_rewriter.tags',        '');
 # );
 
 
-/**
- * File repositary
- */
-global $upload_file_path;
-
-$upload_file_path = 'sites/default/files/WebFM/';
 
 /**
  * Project settings:
@@ -275,5 +268,13 @@ $upload_file_path = 'sites/default/files/WebFM/';
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
+ 
+ /**
+ * File repositary
+ */
+global $upload_file_path;
 
+$upload_file_path = 'sites/default/files/WebFM/';
+
+ 
 
