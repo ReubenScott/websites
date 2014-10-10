@@ -1,0 +1,5 @@
+; $Id$
+name = Download
+description = Download clients
+core = 6.x
+package = Pro Drupal Development

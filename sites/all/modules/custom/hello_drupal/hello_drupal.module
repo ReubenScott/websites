@@ -1,0 +1,49 @@
+
+<?php
+function hello_drupal_menu() {
+
+  $items = array();
+
+  $items['hello_drupal'] = array(
+    'title' => 'hello_drupal',
+    'page callback' => 'hello_drupal_page',
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+
+function hello_drupal_page() {
+
+  $html = '';
+
+  $html.= '<h2>Hello Drupal Module</h2>';
+
+  $html.= '
+<br />
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla gravida hendrerit cursus. Sed egestas vestibulum ultricies. Cras ornare….. auctor quis sagittis quis, molestie nec eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+<br />
+<br />
+In hac habitasse platea dictumst. Mauris scelerisque dui ac nulla porta non aliquet leo gravida. Nam vehicula dignissim risus, sit amet varius ……. Vivamus consequat sodales tempus.
+';
+
+  return $html;
+}
+
+function hello_drupal_block($op='list', $delta=0) {
+
+  if ($op == "list") {
+
+    $block[0]["info"] = t('show time');
+
+    return $block;
+
+  } else if ($op == 'view') {
+    $output = 'now time:' . date('Y-m-d H:i:s',date('U'));
+    $block['subject'] = 'show time';
+    $block['content'] = $output;
+
+    return $block;
+  }
+}
