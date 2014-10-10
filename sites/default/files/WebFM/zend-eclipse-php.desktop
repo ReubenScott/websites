@@ -1,9 +1,0 @@
-#!/usr/bin/env xdg-open
-
-[Desktop Entry]
-Version=1.0
-Name=zend-eclipse-php
-Type=Application
-Terminal=false
-Exec=/opt/zend-eclipse-php/zend-eclipse-php
-Icon=/opt/zend-eclipse-php/plugins/org.eclipse.platform_3.8.2.v201301310800/eclipse256.png

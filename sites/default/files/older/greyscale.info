@@ -1,8 +1,0 @@
-name = Greyscale Theme
-description = Theme for Greyscale.
-version = VERSION
-core = 6.x
-engine = phptemplate
-
-stylesheets[all][] = css/bootstrap.css
-stylesheets[all][] = css/style.css
