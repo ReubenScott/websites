@@ -1,0 +1,15 @@
+; $Id: imagex.info,v 1.5 2009/08/12 09:21:51 sdrycroft Exp $
+name = Imagex
+description = Extends the basic image functionality to make multiple file upload easier
+package = Image
+core = 6.x
+dependencies[] = image
+project = imagex
+version = "6.x-2.1"
+
+; Information added by drupal.org packaging script on 2009-08-12
+version = "6.x-2.1"
+core = "6.x"
+project = "imagex"
+datestamp = "1250069132"
+

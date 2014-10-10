@@ -1,0 +1,168 @@
+<?php
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+*/
+
+/**
+ * Implement hook_menu
+ */
+function fileupload_menu() {
+  $items = array();
+  // URL to access add new User
+  $items ['upload/upload'] = array(
+    'title' => t('Upload New File'),
+    'description' => t('Upload New File.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('upload_form'),
+    'access arguments' => array('access content'),
+  //  'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_CALLBACK
+  );
+  $items ['file/list'] = array(
+    'title' => t('Web File Manager'),
+    'description' => t('Web File Manager.'),
+    'page callback' => 'file_list',
+    'access callback' => true,
+    'type' => MENU_CALLBACK
+  );
+  
+  
+  
+  return $items;
+}
+
+/**
+ * Implements hook_theme()
+ */
+function fileupload_theme() {
+  return array(
+    'upload_list' => array(
+      'template' => 'upload_list',
+      'arguments' => array(
+        'form' => NULL,
+        'get' => NULL
+      )
+    ),
+    'upload_action' => array(
+      'template' => 'upload_action',
+      'arguments' => array(
+        'form' => NULL,
+        'get' => NULL
+      )
+    )
+  );
+}
+
+/*
+ * hook_form
+*/
+function upload_form($form) {
+  $form = array();
+
+  $form['#attributes'] = array('enctype' => "multipart/form-data"); // Not necessary for D7.
+
+  $form['file_name'] = array(
+    '#type' => 'textfield',
+    '#id' => 'file_name',
+    '#title' => t('File Name'),
+  );
+
+  $form['upload'] = array(
+    '#type' => 'file',
+    '#title' => t('Upload File'),
+    '#size' => 60
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Upload'),
+  );
+ 
+  return $form;
+}
+
+
+/*
+ * hook_form_validate
+*/
+function fileupload_form_validate(&$form, &$form_state) {
+
+//  if(empty($form_state['upload'])) {
+//    form_set_error('upload', t('File missing for upload.')); // t()
+//  }
+}
+
+
+
+/*
+ * hook_form_submit
+*/
+function fileupload_form_submit(&$form, &$form_state) {
+
+  $validators = array();
+//  $file = file_save_upload('upload', $validators, file_directory_path());
+  global $upload_file_path;
+  $file = file_save_upload('upload', $validators, $upload_file_path, FALSE);
+
+  if($file!= 0 ) {
+    drupal_set_message(t('Uploaded File successfully.'));
+  }  else {
+    drupal_set_message(t('The attched file failed to upload. Please try again'));
+  }
+  
+  file_set_status($file, FILE_STATUS_PERMANENT);
+
+}
+
+
+function file_list() {
+	
+  $html = '';	  
+  //header
+  $header = array(
+    array('data' => t('File name'), 'field' => 'filename', 'sort' => 'asc'),
+    array('data' => t('File path'), 'field' => 'filepath', 'sort' => 'asc'),
+    array('data' => t('File size'), 'field' => 'filesize', 'sort' => 'desc'),
+    array('data' => t('Upload time'), 'field' => 'timestamp', 'sort' => 'asc'),
+  );
+
+  $query = pager_query("SELECT * FROM files" . tablesort_sql($header), $limit = 30);
+     
+  $rows= array();
+  
+  while ($row = db_fetch_array($query)) {      
+    $data[] = array(
+	  $row['filename'], $row['filepath'], $row['filesize'],$row['timestamp']
+    );    
+  }
+    
+  $html .= theme('table', $header, $data);
+  $html .= theme('pager');
+  return $html;
+}
+
+
+
+
+/**
+ * menu ajax callback
+ */
+function device_get_guid() {
+  $guid = create_guid();
+  drupal_json(array('status' => 'success', 'data' => $guid));
+}
+
+/**
+ * create a guid
+ */
+function create_guid() {
+  $charid = md5(uniqid(rand(), true));
+  $hyphen = chr(45); // "-"
+  $uuid = substr($charid, 0, 8) . $hyphen
+    . substr($charid, 8, 4) . $hyphen
+    . substr($charid, 12, 4) . $hyphen
+    . substr($charid, 16, 4) . $hyphen
+    . substr($charid, 20, 12);
+  return $uuid;
+}

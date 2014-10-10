@@ -1,0 +1,9 @@
+name = Greyscale
+description = Theme for Greyscale.
+version = 1.x
+core = 6.x
+engine = phptemplate
+
+stylesheets[all][] = css/bootstrap.css
+stylesheets[all][] = css/style.css
+scripts[] = js/covidien_common.js

@@ -1,0 +1,119 @@
+<?php
+
+/**
+ * Implement hook_menu
+ */
+function joke_menu() {
+  $items = array ();
+  // URL to access add new User
+  $items ['joke/list'] = array (
+    'page callback' => 'joke_list',
+    'access callback' => true,
+    'type' => MENU_CALLBACK
+  );
+  $items ['joke/save'] = array (
+    'page callback' => 'joke_action',
+    'access callback' => true,
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+
+/**
+ * Implements hook_init()
+ */
+function joke_init() {
+  module_load_include('inc', 'joke', '/includes/joke_query');
+
+  if (arg(0) == 'joke') {
+    drupal_add_js(drupal_get_path('theme', 'covidien_theme') . '/js/covidien.js');
+    drupal_add_js('misc/ahah.js');
+    drupal_add_js('misc/autocomplete.js');
+    drupal_add_js(drupal_get_path('module', 'covidien_ui') . '/js/covidien_ahah.js');
+    drupal_add_js(drupal_get_path('module', 'covidien_ui') . '/js/covidien_autocomplete.js');
+  }
+
+}
+
+
+/**
+ * Implementation of hook_node_info().
+ */
+function joke_node_info() {
+// We return an array since a module can define multiple node types.
+// We're only defining one node type, type 'joke'.
+  return array(
+    'joke' => array(
+      'name' => t('Joke'), // Required.
+      'module' => 'joke', // Required.
+      'description' => t('Tell us your favorite joke!'), // Required.
+      'has_title' => TRUE,
+      'title_label' => t('Title'),
+      'has_body' => TRUE,
+      'body_label' => t('Joke'),
+      'min_word_count' => 2,
+      'locked' => TRUE
+    )
+  );
+}
+
+/**
+ * Implementation of hook_form().
+ */
+function joke_form(&$node, $form_state) {
+  return node_content_form($node, $form_state);
+//如果要特殊处理，可以把node_content_form拷贝过来，然后修改。
+}
+
+
+/**
+ * Implements hook_theme()
+ */
+function joke_theme() {
+  return array (
+    'joke_list' => array (
+      'template' => 'joke_list',
+      'arguments' => array (
+        'form' => NULL,
+        'get' => NULL
+      )
+    ),
+    'joke_action' => array (
+      'template' => 'joke_list',
+      'arguments' => array (
+        'form' => NULL,
+        'get' => NULL
+      )
+    ),
+  );
+}
+
+
+function joke_check_access() {
+  return TRUE;
+}
+
+function joke_list() {
+  $output = theme ( 'joke_list' );
+  return $output;
+}
+
+function joke_action() {
+  $output = theme ( 'joke_action' );
+  return $output;
+}
+
+
+
+function template_preprocess_joke_list(&$vars) {
+
+//  echo "covidien_theme_preprocess_joke_list";
+  $query_files = joke_cron_query(2);
+
+  echo "<pre>" ;
+  echo $query_files ;
+
+}
+
+
