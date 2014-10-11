@@ -1,5 +1,0 @@
-; $Id$
-name = File Upload Manage
-description = File Upload Manage
-core = 6.x
-package = Pro Drupal Development
