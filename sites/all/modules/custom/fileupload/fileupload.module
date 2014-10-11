@@ -9,7 +9,7 @@
  */
 function fileupload_menu() {
   $items = array();
-  // URL to access add new User
+// URL to access add new User
   $items ['fileupload/upload'] = array(
     'title' => t('File Upload Manager'),
     'description' => t('File Upload Manager.'),
@@ -26,7 +26,7 @@ function fileupload_menu() {
   $items ['fileupload/filelist'] = array(
     'title' => t('Web File Manager'),
     'description' => t('Web File Manager.'),
-    'page callback' => 'file_list',
+    'page callback' => 'get_disk_files',
     'access callback' => true,
     'type' => MENU_CALLBACK
   );
@@ -52,7 +52,7 @@ function fileupload_form($form) {
   $form = array();
 
   $form['#method'] = 'post';
-  // $form['#action'] = url('uploadfiles/filelist');
+// $form['#action'] = url('uploadfiles/filelist');
 
   $form['#attributes'] = array('enctype' => "multipart/form-data"); // Not necessary for D7.
 
@@ -132,10 +132,56 @@ function ajaxFileUpload() {
 }
 
 
+
+//获取某目录下所有文件、目录名（不包括子目录下文件、目录名）
+function get_disk_files() {
+  global $upload_file_path;
+  $handler = opendir($upload_file_path);
+  while (($filename = readdir($handler)) !== false) {
+
+    var_dump($filename);
+    ////务必使用!==，防止目录下出现类似文件名“0”等情况
+    if ($filename != "." && $filename != "..") {
+      $files[] = $filename ;
+    }
+  }
+  closedir($handler);
+
+  //打印所有文件名
+  foreach ($files as $value) {
+    $html .= $value."<br />";
+  }
+
+  return $html;
+}
+
+
+function get_allfiles($path,&$files) {
+  if(is_dir($path)) {
+    $dp = dir($path);
+    while ($file = $dp ->read()) {
+      if($file !="." && $file !="..") {
+        get_allfiles($path."/".$file, $files);
+      }
+    }
+    $dp ->close();
+  }
+  if(is_file($path)) {
+    $files[] =  $path;
+  }
+}
+
+function get_filenamesbydir($dir) {
+  $files =  array();
+  get_allfiles($dir,$files);
+  return $files;
+}
+
+
 function file_list() {
 
   $html = '';
-  //header
+//header
   $header = array(
     array('data' => t('File name'), 'field' => 'filename', 'sort' => 'asc'),
     array('data' => t('File path'), 'field' => 'filepath', 'sort' => 'asc'),
