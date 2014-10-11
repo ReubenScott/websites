@@ -89,7 +89,8 @@
  *   $db_url = 'pgsql://username:password@localhost/databasename';
  */
 
-$db_url = 'mysql://c2316382admin:password@mysql-c/c2316382_companysites';
+//$db_url = 'mysql://c2316382admin:password@mysql-c/c2316382_companysites';
+$db_url = 'mysql://root:123456@localhost/companysites';
 
 $db_prefix = '';
 
