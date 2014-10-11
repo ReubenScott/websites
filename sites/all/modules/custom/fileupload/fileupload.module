@@ -1,0 +1,186 @@
+<?php
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+*/
+
+/**
+ * Implement hook_menu
+ */
+function fileupload_menu() {
+  $items = array();
+  // URL to access add new User
+  $items ['fileupload/upload'] = array(
+    'title' => t('File Upload Manager'),
+    'description' => t('File Upload Manager.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('fileupload_form'),
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items ['fileupload/ajaxFileUpload'] = array(
+    'page callback' => 'ajaxFileUpload',
+    'access callback' => true,
+    'type' => MENU_CALLBACK
+  );
+  $items ['fileupload/filelist'] = array(
+    'title' => t('Web File Manager'),
+    'description' => t('Web File Manager.'),
+    'page callback' => 'file_list',
+    'access callback' => true,
+    'type' => MENU_CALLBACK
+  );
+
+
+  return $items;
+}
+
+/**
+ * Implements hook_init()
+ */
+function fileupload_init() {
+  drupal_add_js('misc/jquery.js');
+  drupal_add_js('sites/all/js/ajaxfileupload.js');
+  drupal_add_js(drupal_get_path('module', 'fileupload') . '/js/fileupload.js');
+}
+
+
+/*
+ * hook_form
+*/
+function fileupload_form($form) {
+  $form = array();
+
+  $form['#method'] = 'post';
+  // $form['#action'] = url('uploadfiles/filelist');
+
+  $form['#attributes'] = array('enctype' => "multipart/form-data"); // Not necessary for D7.
+
+  $form['file_name'] = array(
+    '#type' => 'textfield',
+    '#id' => 'file_name',
+    '#title' => t('File Name'),
+  );
+
+  $form['attach'] = array(
+    '#type' => 'file',
+    '#title' => t('Upload File'),
+    '#id' => 'attach_id',
+    '#size' => 60,
+    '#prefix' => '<div>',
+    '#suffix' => '<img id="loading" style="display:none;" src="'.url('sites/all/image/loading.gif') . '" ></div>',
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Upload'),
+    '#attributes' => array('onclick' => 'loadingimage("loading");ajaxFileUpload("attach_id");return false' ),
+  );
+
+
+  return $form;
+}
+
+
+/*
+ * hook_form_validate
+*/
+function fileupload_form_validate(&$form, &$form_state) {
+
+//  if(empty($form_state['upload'])) {
+//    form_set_error('upload', t('File missing for upload.')); // t()
+//  }
+}
+
+
+
+/*
+ * hook_form_submit
+*/
+function fileupload_form_submit(&$form, &$form_state) {
+
+//  $validators = array();
+////  $file = file_save_upload('upload', $validators, file_directory_path());
+//  global $upload_file_path;
+//  $file = file_save_upload('upload', $validators, $upload_file_path, FALSE);
+//
+//  if($file!= 0 ) {
+//    drupal_set_message(t('Uploaded File successfully.'));
+//  }  else {
+//    drupal_set_message(t('The attched file failed to upload. Please try again'));
+//  }
+//  file_set_status($file, FILE_STATUS_PERMANENT);
+
+}
+
+function ajaxFileUpload() {
+  global $upload_file_path;
+  if(!is_dir($upload_file_path)) {
+    mkdir($upload_file_path,0755 ,true);
+  }
+
+  if (file_exists($upload_file_path . $_FILES['files']['name']['attach'])) {
+    $msg = $_FILES['files']['name']['attach'] . " already exists. ";
+  } else if( move_uploaded_file($_FILES['files']['tmp_name']['attach'] , $upload_file_path . $_FILES['files']['name']['attach']) ) {
+    $msg = "Upload Successfully. ";
+  } else {
+    $msg = "There was an error uploading the file, please try again!";
+  }
+
+  echo json_encode(array('msg' => $msg));
+  exit;
+}
+
+
+function file_list() {
+
+  $html = '';
+  //header
+  $header = array(
+    array('data' => t('File name'), 'field' => 'filename', 'sort' => 'asc'),
+    array('data' => t('File path'), 'field' => 'filepath', 'sort' => 'asc'),
+    array('data' => t('File size'), 'field' => 'filesize', 'sort' => 'desc'),
+    array('data' => t('Upload time'), 'field' => 'timestamp', 'sort' => 'asc'),
+  );
+
+  $query = pager_query("SELECT * FROM files" . tablesort_sql($header), $limit = 30);
+
+  $rows= array();
+
+  while ($row = db_fetch_array($query)) {
+    $rows[] = array(
+      $row['filename'], $row['filepath'], $row['filesize'],$row['timestamp']
+    );
+  }
+
+  $html .= theme('table', $header, $rows);
+  $html .= theme('pager');
+  return $html;
+
+}
+
+
+
+/**
+ * menu ajax callback
+ */
+function device_get_guid() {
+  $guid = create_guid();
+  drupal_json(array('status' => 'success', 'data' => $guid));
+}
+
+/**
+ * create a guid
+ */
+function create_guid() {
+  $charid = md5(uniqid(rand(), true));
+  $hyphen = chr(45); // "-"
+  $uuid = substr($charid, 0, 8) . $hyphen
+    . substr($charid, 8, 4) . $hyphen
+    . substr($charid, 12, 4) . $hyphen
+    . substr($charid, 16, 4) . $hyphen
+    . substr($charid, 20, 12);
+  return $uuid;
+}
+
+
