@@ -1,9 +1,12 @@
 /**
- * version = "6.x-1.9.19-i54"
+*
+*
+*  Generic elements
 */
-* { margin : 0;
-    padding: 0;
-    font-family : Arial, sans-serif;
+* {
+  margin : 0;
+  padding: 0;
+  font-family : Arial, sans-serif;
 }
 
 body {
@@ -17,31 +20,12 @@ body {
   line-height : 20px;
 }
 
-/* Login Page */
-
-.login_page{margin : 0 auto; width : 500px;}
-.login_page h1{margin-top : 10px; margin-bottom : 30px;}
-.login_logo{margin-top : 10px; margin-bottom : 10px;}
-.login_process{ border : 1px solid #D1D3D4; border-radius : 10px 10px 10px 10px; background : #E4E3E3;}
-.login_process h2 { margin-left : 20px; margin-top : 10px; margin-bottom : 30px; }
-.login_error{color : red; font-size : 11px; font-weight : bold;margin-left : 10px;}
-.login_fields{ margin-left : 50px; color : #A8A8A7; }
-.login_fields input[type="text"], .login_fields input[type="hidden"], .login_fields #edit-pass{ margin-top : 15px; margin-bottom : 5px; font-size : 12px; color : #A8A8A7;}
-.login_process input[type="text"], .login_process input[type="password"]{width : 330px; color : #A8A8A7;}
-.login_fields input[type="submit"]{color : #FFFFFF; font-size : 14px;}
-.login_button{margin-right : 112px;}
-.login_page a{color : #003878; text-decoration : underline;}
-div.user_setting_content, div.user_setting_content label{font-size : 11px; color : #000000;}
-div.user_setting_content label{padding-left : 30px;}
-div.user_setting_no_list, div.table_title{font-size : 12px; color : #000000; font-weight : normal;}
-
-/* Login Page End */
 
 /* General */
 h1, h1 a{color: #003878; font-size : 20px; font-weight : bold;}
-h2 {font-size : 18px ; font-weight  : normal; margin: 20px -10px; color : #696B73;}
-h3 {font-size : 18px ; font-weight  : normal; color : #000000 ;}
-h4{font-size : 14px ; font-weight : normal; color : #000000;}
+h2 {font-size : 18px ; font-weight : normal; color : #696B73; margin: 20px; }
+h3 {font-size : 18px ; font-weight : normal; color : #000000;}
+h4 {font-size : 14px ; font-weight : normal; color : #000000;}
 textfield {font-size : 10px ; color :#A8A8A7; border : 1px solid #D1D3D4; width : 200px; margin-left : 5px; padding : 3px;}
 select {font-size : 11px ; color :#000000; border : 1px solid #A8A8A7; width : 183px; background : #DFDFDF; height : 25px; padding : 3px;}
 options{padding : 3px 0px 3px 0px;}
@@ -69,7 +53,12 @@ font{font-size : 12px;}
 input[type="text"], table td input[type="text"], input[type="password"]{width : 250px;}
 table.add_new tr td input[type="text"]{/*color : #A8A8A7; */width : 250px;}
 table.add_new tr td, table.edit_new tr td{padding-left : 35px;}
+
 /* General End*/
+
+
+
+
 p.discrips{font-size : 11px; color : #000000; padding-left : 30px;}
 /* Service */
 .noborder { border:none; border-collapse: separate;  }
@@ -102,11 +91,11 @@ div.services h2{font-size : 18px ; font-weight  : normal; margin: 20px 0px 20px 
 #cboxWrapper div div div div{background : #E4E3E3; border-radius : 10px 10px 10px 10px;}
 /* Popup End */
 
-/* Header 
+/* Header */
 .head_and_menu{margin : 0 auto; }
 .left_title{float : left; margin-left: 270px; margin-top : -25px;}
 #right_menu{float :right; margin-top : -25px;}
-#header-region {margin : 0 auto;  height: 3em;  background: #53B7E8; width : 1000px;}
+
 #wrapper {  background: #FFFFFF; margin: 0 auto; width : 1000px;}
 #wrapper #container {  margin: 0 auto;  padding: 0 20px;  max-width: 1000px;  border :	1px solid #A8A8A7 ;}
 #wrapper #container #header {  height: 50px;}
@@ -115,7 +104,67 @@ div.services h2{font-size : 18px ; font-weight  : normal; margin: 20px 0px 20px 
 #wrapper #container #header h1 span {  font-weight: bold;}
 #wrapper #container #header h1 img {  padding-top: 5px;  padding-right: 20px;   float: left; }
 #squeeze{margin-top : 50px; }
- Header End */
+
+#wrapper #container .sidebar {
+  margin: 60px 0 5em;
+  width: 210px;
+  float: left;
+  z-index: 2;
+  position: relative;
+}
+
+#sidebar-right {
+  float: left;
+}
+
+
+/* Header End */
+
+/* Menus or Primary Links*/
+.T10C2{color : #53B7E8; font-size : 18px; font-weight : bold;}
+.T10C11{color : #FFFFFF; font-size : 18px; font-weight : bold;}
+
+#navigation ul.primary-links {
+  position: relative;  z-index: 4;
+  font-size: 14px;
+  line-height: 35px;
+  overflow: hidden;
+  display: block;
+  filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr='#FF0000',endColorStr='#F9F900',gradientType='0');
+  background: -moz-linear-gradient(top, #FF0000, #F9F900);
+  background: -o-linear-gradient(top,#54A7F9, #F9F900);
+  background: -webkit-linear-gradient(top,#0ABDEB,#54A7F9);
+}
+
+#navigation ul.primary-links li {
+  color : #696B73;
+  position:  relative;
+  padding: 5px 30px 5px 10px;
+  list-style: none;
+  display: inline;
+  float: left;
+  overflow: hidden;
+}
+
+#navigation ul.primary-links li a{
+  color: #FFFFFF;
+  border-radius: 10px;
+  text-decoration : none;
+  display: block;
+  padding: 0 25px;
+  text-align: center;
+  font-weight:bold;
+}
+
+#navigation ul.primary-links li a:hover{
+  color : #53B7E8;
+  background: none repeat scroll 0 0 #FFFFFF;
+}
+
+
+
+
+/* Menus Part End */
 
 
 /*  head_nav  */
@@ -186,7 +235,7 @@ div.without_label_left{padding-left : 8px;}
 .form-submit, .secondary_submit, .non_active_grey, .non_active_blue{padding: 0px 5px 0px 5px;}
 a.form-submit, a#secondary_submit, a.non_active_blue, a.non_active_grey{padding: 3px 5px 4px 5px;}
 a#secondary_submit:hover{border:2px solid rgb(0, 56, 120); text-decoration : none;  text-decoration : none; 
-                         background: url('../images/grey_up.png') 50% 90%; padding: 2px 5px 2px 3px;}
+  background: url('../images/grey_up.png') 50% 90%; padding: 2px 5px 2px 3px;}
 /* Primary(form) Submit */
 .form-submit{ text-decoration : none;  border:1px solid rgb(72,153, 194); background: url('../images/blue_up.png') 50% 9%; }
 a#form-submit{ text-decoration : none;  border:1px solid rgb(72,153, 194); background: url('../images/blue_up.png') 50% 9%; }
@@ -213,14 +262,7 @@ a#secondary_submit{ border:1px solid rgb(105,107,115); text-decoration : none; b
 fieldset {  margin: 0px;  border: 0px solid #D1D3D4;  background: none;}
 /* Button Or Submit End */
 
-/* Menus or Primary Links*/
-.T10C2{color : #53B7E8; font-size : 18px; font-weight : bold;}
-.T10C11{color : #FFFFFF; font-size : 18px; font-weight : bold;}
-ul.primary-links { width : 320px; margin: 0;  padding: 0px 100px 0px 0px;  float: right; /* LTR */  position: relative;  z-index: 4;}
-ul.primary-links li {color : #696B73; border : 0px; float: left; position: relative; margin: 0 -3px; padding: 5px 30px 5px 10px; list-style: none;}
-ul.primary-links li a.active{color : #53B7E8; text-decoration : none; font-size : 10px; font-weight : normal;}
-ul.primary-links li a{color : #696B73; text-decoration : none; font-size : 10px; font-weight : normal;}
-/* Menus Part End */
+
 
 /* Covidien Css General End*/
 
@@ -229,13 +271,13 @@ ul.primary-links li a{color : #696B73; text-decoration : none; font-size : 10px;
 .tabs{}
 ul.tabs {margin: 0px 0px 3px 20px; padding : 0px; list-style-type: disc;}
 ul.tabs li{color : #000000; background-color : #D1D3D4; border : 1px solid #A8A8A7; font-size : 12px; font-weight : normal; border-radius : 6px 6px 0px 0px; 
-           display: inline; position: relative;  margin: 0 -2px;  padding: 5px 10px 5px 10px;  list-style-type: disc;}
+  display: inline; position: relative;  margin: 0 -2px;  padding: 5px 10px 5px 10px;  list-style-type: disc;}
 ul.tabs li a{ text-decoration : none; color : #000000; font-size : 12px;}
 ul.tabs li.active{background-color : #FFFFFF; border-bottom : 0px; font-size : 12px;}
 
 .tabs_wrapper ul {margin: 0px 0px 3px 20px; padding : 0px; list-style-type: disc;}
 .tabs_wrapper ul li{color : #000000; background-color : #D1D3D4; border : 1px solid #A8A8A7; font-size : 12px; font-weight : normal; border-radius : 6px 6px 0px 0px; 
-                    display: inline; position: relative;  margin: 0 -3px;  padding: 5px 10px 5px 10px;  list-style-type: disc;}
+  display: inline; position: relative;  margin: 0 -3px;  padding: 5px 10px 5px 10px;  list-style-type: disc;}
 .tabs_wrapper ul li a{ text-decoration : none; color : #000000; font-size : 12px; font-weight : normal;}
 .tabs_wrapper ul li.active{background-color : #FFFFFF; border-bottom : 0px; font-size : 12px; font-weight : normal;}
 
@@ -289,6 +331,28 @@ legend{font-size : 14px; color : #000000; }
 
 .edit-inline-save{font-weight : normal;}
 
+
+
+
+/* Login Page */
+
+.login_page{margin : 0 auto; width : 500px;}
+.login_page h1{margin-top : 10px; margin-bottom : 30px;}
+.login_logo{margin-top : 10px; margin-bottom : 10px;}
+.login_process{ border : 1px solid #D1D3D4; border-radius : 10px 10px 10px 10px; background : #E4E3E3;}
+.login_process h2 { margin-left : 20px; margin-top : 10px; margin-bottom : 30px; }
+.login_error{color : red; font-size : 11px; font-weight : bold;margin-left : 10px;}
+.login_fields{ margin-left : 50px; color : #A8A8A7; }
+.login_fields input[type="text"], .login_fields input[type="hidden"], .login_fields #edit-pass{ margin-top : 15px; margin-bottom : 5px; font-size : 12px; color : #A8A8A7;}
+.login_process input[type="text"], .login_process input[type="password"]{width : 330px; color : #A8A8A7;}
+.login_fields input[type="submit"]{color : #FFFFFF; font-size : 14px;}
+.login_button{margin-right : 112px;}
+.login_page a{color : #003878; text-decoration : underline;}
+div.user_setting_content, div.user_setting_content label{font-size : 11px; color : #000000;}
+div.user_setting_content label{padding-left : 30px;}
+div.user_setting_no_list, div.table_title{font-size : 12px; color : #000000; font-weight : normal;}
+
+/* Login Page End */
 
 /* catalog Tables */
 
@@ -477,9 +541,9 @@ h2
   border-top-color:rgb(228,227,227);
   border-top-width:1px;
   background-image: -ms-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
- 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(248,247,247)), to(rgb(228,227,227)));
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(248,247,247)), to(rgb(228,227,227)));
   background-image: -webkit-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
- 	background-image: -o-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
+  background-image: -o-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-image: linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-image: -moz-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-repeat: repeat-x;
@@ -490,9 +554,9 @@ h2
   border-top-color:rgb(228,227,227);
   border-top-width:1px;
   background-image: -ms-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
- 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(248,247,247)), to(rgb(228,227,227)));
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(248,247,247)), to(rgb(228,227,227)));
   background-image: -webkit-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
- 	background-image: -o-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
+  background-image: -o-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-image: linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-image: -moz-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-repeat: repeat-x;
@@ -531,9 +595,9 @@ h2
   border-top-color:rgb(228,227,227);
   border-top-width:1px;
   background-image: -ms-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
- 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(248,247,247)), to(rgb(228,227,227)));
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(248,247,247)), to(rgb(228,227,227)));
   background-image: -webkit-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
- 	background-image: -o-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
+  background-image: -o-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-image: linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-image: -moz-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-repeat: repeat-x;
@@ -544,9 +608,9 @@ h2
   border-top-color:rgb(228,227,227);
   border-top-width:1px;
   background-image: -ms-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
- 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(248,247,247)), to(rgb(228,227,227)));
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(248,247,247)), to(rgb(228,227,227)));
   background-image: -webkit-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
- 	background-image: -o-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
+  background-image: -o-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-image: linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-image: -moz-linear-gradient(top, rgb(248,247,247), rgb(228,227,227));
   background-repeat: repeat-x;
@@ -599,7 +663,7 @@ table a{text-decoration 	:	underline; color : #003878;}
 tr.even, tr.odd {border-bottom: 0px;}
 tr.even, .even td.active{ background : #F8F7F7; } tr.odd, .odd td.active{background : #FFFFFF;}
 /**
- * Aug 9
+* Aug 9
 */
 div.oval_search_wraper div input[type="text"]
 {
@@ -674,7 +738,7 @@ td.add_edit_config div#device_config_hw_list_wraper div div.view-content table t
 td.add_edit_config div#device_config_hw_list_wraper div div.view-content table td.views-field-hw-name {width : 14%; padding: 5px;}
 td.add_edit_config div#device_config_hw_list_wraper div div.view-content table th.views-field-hw-description {width : 16%; padding: 5px;}
 td.add_edit_config div#device_config_hw_list_wraper div div.view-content table td.views-field-hw-description {width : 16%; padding: 5px;}
-td.add_edit_config div#device_config_hw_list_wraper div div.view-content table. th.views-field-sw-description{width : 16%; padding: 5px;}
+td.add_edit_config div#device_config_hw_list_wraper div div.view-content table th.views-field-sw-description{width : 16%; padding: 5px;}
 td.add_edit_config div#device_config_hw_list_wraper div div.view-content table td.views-field-sw-description {width : 16%; padding: 5px;}
 td.add_edit_config div#device_config_hw_list_wraper div div.view-content table th.views-field-nid-1 {width : 10%; padding: 5px;}
 td.add_edit_config div#device_config_hw_list_wraper div div.view-content table td.views-field-nid-1 {width : 10%; padding: 5px;}
@@ -764,7 +828,7 @@ div#edit-last-name-wrapper input,div#edit-username-wrapper input,div#edit-custom
 div.dev_con_rep_message{color : #000000; font-size : 12px; font-weight : normal;}
 ul.pager li a { text-decoration:none !important; }
 /**
- * To avoid the select box position change
+* To avoid the select box position change
 */
 .ahah-progress.ahah-progress-throbber{
   display:none;
@@ -784,7 +848,7 @@ ul.pager li a { text-decoration:none !important; }
 .sticky-header { display:none !important; }
 
 /**
- * Service Records Report
+* Service Records Report
 */
 .servicetype_status{
   font-weight : bold;
@@ -792,7 +856,7 @@ ul.pager li a { text-decoration:none !important; }
 /*********/
 
 /**
- * Browse button localize
+* Browse button localize
 */ 
 #edit-field-document-file-0-upload-wrapper .filefield-upload .document_upload_localize_path ,
 #edit-field-sw-file-0-upload-wrapper .filefield-upload .sw_upload_localize_path 
@@ -809,7 +873,7 @@ ul.pager li a { text-decoration:none !important; }
 .custom-report-note, .filter_title   { font-weight:bold; padding-left:8px; font-size:12px; color:#000000; }
 #hw_list_wraper a, #doc_hw_list_wraper a, #doc_sw_list_wraper a { cursor:pointer }
 /**
- * Component Discrepancy List
+* Component Discrepancy List
 */
 .component_description, .no_description{
   color:#003878;

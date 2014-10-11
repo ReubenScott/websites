@@ -1,315 +1,190 @@
 <?php
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+
+/**
+ * @file
+ * Displays a single Drupal page.
+ *
+ * Available variables:
+ *
+ * General utility variables:
+ * - $base_path: The base URL path of the Drupal installation. At the very
+ *   least, this will always default to /.
+ * - $css: An array of CSS files for the current page.
+ * - $directory: The directory the theme is located in, e.g. themes/garland or
+ *   themes/garland/minelli.
+ * - $is_front: TRUE if the current page is the front page.
+ * - $logged_in: TRUE if the user is registered and signed in.
+ * - $is_admin: TRUE if the user has permission to access administration pages.
+ *
+ * Page metadata:
+ * - $language: (object) The language the site is being displayed in.
+ *   $language->language contains its textual representation.
+ *   $language->dir contains the language direction. It will either be 'ltr' or
+ *   'rtl'.
+ * - $head_title: A modified version of the page title, for use in the TITLE
+ *   element.
+ * - $head: Markup for the HEAD element (including meta tags, keyword tags, and
+ *   so on).
+ * - $styles: Style tags necessary to import all CSS files for the page.
+ * - $scripts: Script tags necessary to load the JavaScript files and settings
+ *   for the page.
+ * - $body_classes: A set of CSS classes for the BODY tag. This contains flags
+ *   indicating the current layout (multiple columns, single column), the
+ *   current path, whether the user is logged in, and so on.
+ *
+ * Site identity:
+ * - $front_page: The URL of the front page. Use this instead of $base_path,
+ *   when linking to the front page. This includes the language domain or
+ *   prefix.
+ * - $logo: The path to the logo image, as defined in theme configuration.
+ * - $site_name: The name of the site, empty when display has been disabled in
+ *   theme settings.
+ * - $site_slogan: The slogan of the site, empty when display has been disabled
+ *   in theme settings.
+ * - $mission: The text of the site mission, empty when display has been
+ *   disabled in theme settings.
+ *
+ * Navigation:
+ * - $search_box: HTML to display the search box, empty if search has been
+ *   disabled.
+ * - $primary_links (array): An array containing primary navigation links for
+ *   the site, if they have been configured.
+ * - $secondary_links (array): An array containing secondary navigation links
+ *   for the site, if they have been configured.
+ *
+ * Page content (in order of occurrence in the default page.tpl.php):
+ * - $left: The HTML for the left sidebar.
+ * - $breadcrumb: The breadcrumb trail for the current page.
+ * - $title: The page title, for use in the actual HTML content.
+ * - $help: Dynamic help text, mostly for admin pages.
+ * - $messages: HTML for status and error messages. Should be displayed
+ *   prominently.
+ * - $tabs: Tabs linking to any sub-pages beneath the current page (e.g., the
+ *   view and edit tabs when displaying a node).
+ * - $content: The main content of the current Drupal page.
+ * - $right: The HTML for the right sidebar.
+ * - $node: The node object, if there is an automatically-loaded node associated
+ *   with the page, and the node ID is the second argument in the page's path
+ *   (e.g. node/12345 and node/12345/revisions, but not comment/reply/12345).
+ *
+ * Footer/closing data:
+ * - $feed_icons: A string of all feed icons for the current page.
+ * - $footer_message: The footer message as defined in the admin settings.
+ * - $footer : The footer region.
+ * - $closure: Final closing markup from any modules that have altered the page.
+ *   This variable should always be output last, after all other dynamic
+ *   content.
+ *
+ * @see template_preprocess()
+ * @see template_preprocess_page()
+ */
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $language->language ?>" lang="<?php print $language->language ?>" dir="<?php print $language->dir ?>">
-  <head>
-    <?php print $head ?>
-    <title><?php print $head_title ?></title>
-    <?php print $styles ?>
-    <?php print $scripts ?>
-  </head>
 
-  <body>
-    <div id="main">
-      <?php /*head begain*/ ?>
-      <div id="header">
-        <div class="user_login"></div>
-        <div class="site_name"><?php print $site_name ;?></div>
-        <h2><?php print $site_name ;?></h2>
-      <?php /*head end*/ ?>
+<head>
+  <?php print $head; ?>
+  <title><?php print $head_title; ?></title>
+  <?php print $styles; ?>
+  <?php print $scripts; ?>
+  <script type="text/javascript"><?php /* Needed to avoid Flash of Unstyled Content in IE */ ?> </script>
+</head>
+<body class="<?php print $body_classes; ?>">
+  <div id="page">
+    <div id="header">
+      <div id="logo-title">
 
-        http://bookstore.yaiyuan.com/
+        <?php if (!empty($logo)): ?>
+          <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home" id="logo">
+            <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
+          </a>
+        <?php endif; ?>
 
-        <div class="head_main">
-          <div class="head_left">
-            <a class="logo" href="/" id="logo"><img src="/sites/all/themes/dushu/images/logo.png"/></a>
-            <div id="search_form" class="text_box">   <div class="region region-search-form">
-                <div id="block-search-form" class="block block-search">
-
-
-                  <div class="content">
-                    <form action="/" method="post" id="search-block-form" accept-charset="UTF-8">
-                      <div>
-                        <div class="container-inline">
-                          <h2 class="element-invisible">搜索表单</h2>
-                          <div class="form-item form-type-textfield form-item-search-block-form">
-                            <label class="element-invisible" for="edit-search-block-form--2">搜索 </label>
-                            <input title="请输入您想搜索的关键词。" type="text" id="edit-search-block-form--2" name="search_block_form" value="" size="15" maxlength="128" class="form-text"/>
-                          </div>
-                          <div class="form-actions form-wrapper" id="edit-actions"/>
-                          <input type="submit" id="edit-submit" name="op" value="搜索" class="form-submit"/>
-                        </div><input type="hidden" name="form_build_id" value="form-dLFxk3pNJi-mZaAtp-Fe3QPAH_uYyqV8taGbo7JNGcI"/>
-                        <input type="hidden" name="form_id" value="search_block_form"/>
-                      </div>
-                      <div id="advsearch-link"><a href="/advsearch">高级搜索</a></div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="head_right">
-            <div class="region region-head-right">
-              <div id="block-obcustom-shopping-cart" class="block block-obcustom">
-
-
-                <div class="content">
-                  <div id="shopping-cart-block">
-                    <dl class="">
-                      <dt class="ld"><s></s><span class="shopping"><span id="shopping-amount">0</span></span><a id="cart-url" href="/cart">去购物车结算</a> <b></b>
-                      </dt>
-                      <dd><div class="prompt"><div class="nogoods"><b></b>购物车中还没有商品，赶紧选购吧！</div></div>
-                      </dd>
-                    </dl>
-                  </div>  </div>
-              </div>
-            </div>
-          </div>
-        </div>
-          
-        <div class="head_nav">
-          <div class="head_nav_innner">
-            <div class="region region-head-nav">
-
-              <div id="all-categorys" class="all-categorys-class">
-                <div class="mt ld">
-                  <h2><a href="#">全部商品分类<b></b></a></h2>
-                </div>
-                <div class="mc" id="bookstore-all-terms" load="2">
-
-                  <div class="item fore1">
-                    <span data-split="1">
-                      <h3>
-                        <a href="/books/category/29">管理</a>		   		</h3>
-                      <s></s>
-                    </span>
-
-                    <div class="i-mc" style="top: 3px;">
-                      <div class="close">×</div>
-                      <div class="subitem">
-
-                        <dl class="fore1">
-                          <dt><a href="/books/category/42">金融</a></dt>
-                          <dd>
-
-
-                            <em> <a href="/bookcategory/3419">货币银行学</a></em>
-
-                            <em> <a href="/bookcategory/3420">金融理论</a></em>
-
-                            <em> <a href="/bookcategory/3421">投资融资</a></em>
-
-                            <em> <a href="/bookcategory/3422">国际金融</a></em>
-
-                            <em> <a href="/bookcategory/3423">企业并购</a></em>
-
-
-                          </dd>
-                        </dl>
-                        <dl class="fore2">
-                          <dt> <a href="/books/category/41">经济</a></dt>
-                          <dd>
-
-
-                            <em> <a href="/bookcategory/3424">经济学理论</a></em>
-
-                            <em> <a href="/bookcategory/3425">经济通俗读物</a></em>
-
-                            <em> <a href="/bookcategory/3426">各部门经济</a></em>
-
-                            <em> <a href="/bookcategory/3427">中国经济</a></em>
-
-                            <em> <a href="/bookcategory/3428">国际经济</a></em>
-
-                            <em> <a href="/bookcategory/3429">经济史</a></em>
-
-
-                          </dd>
-                        </dl>
-                        <dl class="fore3">
-                          <dt> <a href="/books/category/40">电子商务</a></dt>
-                          <dd>
-
-
-                          </dd>
-                        </dl>
-                        <dl class="fore4">
-                          <dt> <a href="/books/category/39">战略管理</a></dt>
-                          <dd>
-
-
-                          </dd>
-                        </dl>
-
-
-                      </div>
-                    </div>
-                  </div>
-                  <div class="item fore2">
-                    <span data-split="1">
-                      <h3>
-                        <a href="/books/category/27">小说</a>		   		</h3>
-                      <s></s>
-                    </span>
-
-                    <div class="i-mc" style="top: 3px;">
-                      <div class="close">×</div>
-                      <div class="subitem">
-
-                        <dl class="fore1">
-                          <dt> <a href="/books/category/33">情感</a></dt>
-                          <dd>
-
-
-                            <em> <a href="/bookcategory/3430">言情</a></em>
-
-                            <em> <a href="/bookcategory/3431">家庭/婚姻</a></em>
-
-                            <em> <a href="/bookcategory/3432">女性</a></em>
-
-                            <em> <a href="/bookcategory/3433">情色</a></em>
-
-                            <em> <a href="/bookcategory/3434">其他</a></em>
-
-
-                          </dd>
-                        </dl>
-                        <dl class="fore2">
-                          <dt> <a href="/books/category/34">武侠</a></dt>
-                          <dd>
-
-
-                          </dd>
-                        </dl>
-                        <dl class="fore3">
-                          <dt> <a href="/books/category/35">科幻</a></dt>
-                          <dd>
-
-
-                          </dd>
-                        </dl>
-
-
-                      </div>
-                    </div>
-                  </div>
-                  <div class="item fore3">
-                    <span data-split="1">
-                      <h3>
-                        <a href="/books/category/26">外语</a>		   		</h3>
-                      <s></s>
-                    </span>
-
-                    <div class="i-mc" style="top: 3px;">
-                      <div class="close">×</div>
-                      <div class="subitem">
-
-                        <dl class="fore1">
-                          <dt> <a href="/books/category/32">英语读物</a></dt>
-                          <dd>
-                          </dd>
-                        </dl>
-                        <dl class="fore2">
-                          <dt> <a href="/books/category/31">英语考试</a></dt>
-                          <dd>
-                          </dd>
-                        </dl>
-                        <dl class="fore3">
-                          <dt> <a href="/books/category/30">英语工具书</a></dt>
-                          <dd>
-                            <em> <a href="/bookcategory/3418">英汉双解</a></em>
-                            <em> <a href="/bookcategory/3417">专项英语词典</a></em>
-                            <em> <a href="/books/category/3416">英汉词典</a></em>
-                          </dd>
-                        </dl>
-
-
-                      </div>
-                    </div>
-                  </div>
-                  <div class="item fore4">
-                    <span data-split="1">
-                      <h3>
-                        <a href="/books/category/28">教材</a>		   		</h3>
-                      <s></s>
-                    </span>
-
-                    <div class="i-mc" style="top: 3px;">
-                      <div class="close">×</div>
-                      <div class="subitem">
-                        <dl class="fore1">
-                          <dt> <a href="/books/category/36">本科生教材</a></dt>
-                          <dd>
-                            <em> <a href="/bookcategory/3435">公共课</a></em>
-                            <em> <a href="/bookcategory/3436">经济管理类</a></em>
-                            <em> <a href="/bookcategory/3437">工学</a></em>
-                            <em> <a href="/bookcategory/3438">文法类</a></em>
-                            <em> <a href="/bookcategory/3439">医学</a></em>
-                            <em> <a href="/books/category/3440">理学</a></em>
-                          </dd>
-                        </dl>
-                        <dl class="fore2">
-                          <dt> <a href="/books/category/37">研究生教材</a></dt>
-                          <dd>
-                          </dd>
-                        </dl>
-                        <dl class="fore3">
-                          <dt> <a href="/books/category/38">高中教材</a></dt>
-                          <dd>
-                          </dd>
-                        </dl>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <ul class="menu">
-                <li class="first leaf active-trail"><a href="/" title="" class="active">首页</a></li>
-                <li class="leaf"><a href="/books/recommend" title="">推荐图书</a></li>
-                <li class="leaf"><a href="/books/new" title="">最新图书</a></li>
-                <li class="leaf"><a href="/books/popular" title="">热门图书</a></li>
-                <li class="leaf"><a href="/news" title="">站内公告</a></li>
-                <li class="leaf"><a href="/resources" title="">资源下载</a></li>
-                <li class="last leaf"><a href="/aboutus">关于我们</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <?php
-      if(!empty($primary_links)) {
-        print theme('links',$primary_links,array('id'=>'site_menu'));
-      }
-      ?>
-
-      <?php
-      /* left */
-      if($left):
-        ?>
-
-      <div id="sidebar-left" class="sidebar">
-          <?php if($search_box): ?><div class="block block-theme"><?php print $search_box; ?></div>
+        <div id="name-and-slogan">
+          <?php if (!empty($site_name)): ?>
+            <h1 id="site-name">
+              <a href="<?php print $front_page ?>" title="<?php print t('Home'); ?>" rel="home"><span><?php print $site_name; ?></span></a>
+            </h1>
           <?php endif; ?>
-          <?php print $left ;?>
-      </div>
 
-      <?php
-      /* left end  */
-      endif;
+          <?php if (!empty($site_slogan)): ?>
+            <div id="site-slogan"><?php print $site_slogan; ?></div>
+          <?php endif; ?>
+        </div> <!-- /name-and-slogan -->
+      </div> <!-- /logo-title -->
 
-      if (!drupal_is_front_page()) {
-        print $content;
-      }
-      ?>
+      <?php if (!empty($search_box)): ?>
+        <div id="search-box"><?php print $search_box; ?></div>
+      <?php endif; ?>
 
-    </div>
+      <?php if (!empty($header)): ?>
+        <div id="header-region">
+          <?php print $header; ?>
+        </div>
+      <?php endif; ?>
 
+    </div> <!-- /header -->
 
-  </body>
+    <div id="container" class="clear-block">
 
+      <div id="navigation" class="menu <?php if (!empty($primary_links)) { print "withprimary"; } if (!empty($secondary_links)) { print " withsecondary"; } ?> ">
+        <?php if (!empty($primary_links)): ?>
+          <div id="primary" class="clear-block">
+            <?php
+              print theme('links', $primary_links, array('class' => 'links primary-links'));
+            ?>
+          </div>
+        <?php endif; ?>
 
+        <?php if (!empty($secondary_links)): ?>
+          <div id="secondary" class="clear-block">
+            <?php print theme('links', $secondary_links, array('class' => 'links secondary-links')); ?>
+          </div>
+        <?php endif; ?>
+      </div> <!-- /navigation -->
 
+      <?php if (!empty($left)): ?>
+        <div id="sidebar-left" class="column sidebar">
+          <?php print $left; ?>
+        </div> <!-- /sidebar-left -->
+      <?php endif; ?>
+
+      <div id="main" class="column"><div id="main-squeeze">
+        <?php if (!empty($breadcrumb)): ?><div id="breadcrumb"><?php print $breadcrumb; ?></div><?php endif; ?>
+        <?php if (!empty($mission)): ?><div id="mission"><?php print $mission; ?></div><?php endif; ?>
+
+        <div id="content">
+          <?php if (!empty($title)): ?><h1 class="title" id="page-title"><?php print $title; ?></h1><?php endif; ?>
+          <?php if (!empty($tabs)): ?><div class="tabs"><?php print $tabs; ?></div><?php endif; ?>
+          <?php if (!empty($messages)): print $messages; endif; ?>
+          <?php if (!empty($help)): print $help; endif; ?>
+          <div id="content-content" class="clear-block">
+            <?php print $content; ?>
+          </div> <!-- /content-content -->
+          <?php print $feed_icons; ?>
+        </div> <!-- /content -->
+
+      </div></div> <!-- /main-squeeze /main -->
+
+      <?php if (!empty($right)): ?>
+        <div id="sidebar-right" class="column sidebar">
+          <?php print $right; ?>
+        </div> <!-- /sidebar-right -->
+      <?php endif; ?>
+
+    </div> <!-- /container -->
+
+    <div id="footer-wrapper">
+      <div id="footer">
+        <?php print $footer_message; ?>
+        <?php if (!empty($footer)): print $footer; endif; ?>
+      </div> <!-- /footer -->
+    </div> <!-- /footer-wrapper -->
+
+    <?php print $closure; ?>
+
+  </div> <!-- /page -->
+
+</body>
 </html>
