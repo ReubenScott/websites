@@ -3,16 +3,16 @@
 /**
  * Implement hook_menu
  */
-function covidien_download_menu() {
+function download_menu() {
   $items = array();
   // URL to access add new User
   $items ['download/list'] = array(
-    'page callback' => 'covidien_download',
+    'page callback' => 'download',
     'access callback' => true,
     'type' => MENU_CALLBACK
   );
   $items ['download/download'] = array(
-    'page callback' => 'covidien_download_action',
+    'page callback' => 'download_action',
     'access callback' => true,
     'type' => MENU_CALLBACK
   );
@@ -22,7 +22,7 @@ function covidien_download_menu() {
 /**
  * Implements hook_theme()
  */
-function covidien_download_theme() {
+function download_theme() {
   return array(
     'download_list' => array(
       'template' => 'download_list',
@@ -41,7 +41,7 @@ function covidien_download_theme() {
   );
 }
 
-function covidien_download_check_access() {
+function download_check_access() {
   return TRUE;
 }
 
@@ -50,16 +50,16 @@ function covidien_download() {
   return $output;
 }
 
-function covidien_download_action() {
+function download_action() {
   $output = theme('download_action');
   return $output;
 }
 
-function covidien_theme_preprocess_download_action(&$vars) {
+function download_preprocess_download_action(&$vars) {
   $filePath = $_GET ['filePath'];
   $deviceType = $_GET ['deviceType'];
-  global $baseDir;
-  $filename = $baseDir . $deviceType . '/' . $filePath;
+
+  $filename = 'sites/default/files/WebFM//linux.zip';
 
   header("Content-Type: application/force-download");
   header("Content-Transfer-Encoding: binary");
@@ -68,7 +68,7 @@ function covidien_theme_preprocess_download_action(&$vars) {
   readfile($filename);
 }
 
-function covidien_theme_preprocess_download_list(&$vars) {
+function download_preprocess_download_list(&$vars) {
   $deviceType = $_POST ['sel_device_type'];
   $vars ['deviceType'] = $deviceType;
   global $baseDir;
@@ -101,8 +101,8 @@ function getAllFilesInDir($dir) {
   foreach ($allDirs as $flist) {
     $dirs = getFilesInDir($dir . '/' . $flist, true);
     array_push($result, array(
-      $flist => $dirs
-    ));
+        $flist => $dirs
+      ));
   }
   return $result;
 }
@@ -125,7 +125,7 @@ function getFilesInDir($dir, $needDetails = false) {
           'fileSize' => $fileSize,
           'lastModified' => $lastModified,
           'description' => $desc
-        ));
+          ));
       } else {
         array_push($dirs, $flist);
       }

@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * Implement hook_menu
+ */
+function commodity_menu() {
+  $items = array();
+  // URL to access add new User
+  $items ['commodity'] = array(
+    'title' => t('Commodities'),
+    'description' => t('Commodities.'),
+    'page callback' => 'commodities',
+    'access callback' => true,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items ['commodity/recommend'] = array(
+    'title' => t('Recommending Commodities'),
+    'description' => t('Recommending Commodities.'),
+    'page callback' => 'recommending_commodities',
+    'access callback' => true,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items ['commodity/new'] = array(
+    'title' => t('New Commodities'),
+    'description' => t('New Commodities.'),
+    'page callback' => 'new_commodities',
+    'access callback' => true,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items ['commodity/management'] = array(
+    'title' => t('Commodities Management'),
+    'description' => t('Commodities Management.'),
+    'page callback' => 'commodities_management',
+    'access callback' => true,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items ['commodity/add'] = array(
+    'page callback' => 'add_commodity',
+    'page arguments' => array('fileupload_form'),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items ['commodity/edit'] = array(
+    'page callback' => 'edit_commodity',
+    'access callback' => true,
+    'type' => MENU_CALLBACK
+  );
+  $items ['commodity/delete'] = array(
+    'page callback' => 'delete_commodity',
+    'access callback' => true,
+    'type' => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+
+/**
+ * Implements hook_theme()
+ */
+function commodity_theme() {
+  return array(
+    'management' => array(
+      'template' => 'management',
+      'arguments' => array(
+        'form' => NULL,
+        'get' => NULL
+      )
+    ),
+  );
+}
+
+/**
+ * Implements hook_init()
+ */
+function commodity_init() {
+  //  require_once 'sites/all/includes/common.inc';
+  //  drupal_add_js('misc/jquery.js');
+  //  drupal_add_js('sites/all/js/ajaxfileupload.js');
+  //  drupal_add_js(drupal_get_path('module', 'commodity') . '/js/commodity.js');
+}
+
+
+function commodity_check_access() {
+  return TRUE;
+}
+
+
+
+function commodities_management() {
+  $output = theme('management');
+  return $output;
+}
+
+
+function commodity_preprocess_management(&$vars) {
+
+
+
+  $vars['html'] = $html ;
+
+}
+
+
+

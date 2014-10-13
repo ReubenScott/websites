@@ -1,0 +1,75 @@
+<?php
+
+// $Id$
+
+
+/**
+ * Implementation of hook_install().
+ */
+function commodity_install() {
+  drupal_install_schema('commodity');
+}
+
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function commodity_uninstall() {
+  drupal_uninstall_schema('commodity');
+}
+
+
+/**
+ * Implementation of hook_schema().
+ */
+function commodity_schema() {
+  $schema['commodity'] = array(
+    'description' => t("Commodities Stores"),
+    'fields' => array(
+      'id' => array(
+       'type' => 'serial',
+       'unsigned' => TRUE,
+       'not null' => TRUE,
+      ),
+      'categroy' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'description' => t('Name of the commodity.'),
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'description' => t('Name of the commodity.'),
+      ),
+      'stock' => array(
+        'type' => 'int',
+        'description' => t('Stock of the commodity.'),
+      ),
+      'sales_volume' => array(
+        'type' => 'int',
+        'description' => t('Sales volume of the commodity.'),
+      ),
+      'pic' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'description' => t('Pic of the commodity.'),
+      ),
+      'on_shelf_time' => array(
+       'type' => 'datetime',
+       'not null' => FALSE,
+      ),
+      'description' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'description' => t('Description of the commodity.'),
+      ),
+      'hits' => array(
+        'type' => 'int',
+        'description' => t('Hits of the commodity.'),
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}
+

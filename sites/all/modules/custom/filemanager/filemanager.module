@@ -1,0 +1,320 @@
+<?php
+
+/**
+ * Implement hook_menu
+ */
+function filemanager_menu() {
+  $items = array();
+  // URL to access add new User
+  $items ['filemanager/filelist'] = array(
+    'title' => t('Web File Manager'),
+    'description' => t('Web File Manager.'),
+    'page callback' => 'get_disk_files',
+    'access callback' => true,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items ['filemanager/fileupload'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('fileupload_form'),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items ['filemanager/ajaxupload'] = array(
+    'page callback' => 'ajax_file_upload',
+    'access callback' => true,
+    'type' => MENU_CALLBACK
+  );
+  $items ['filemanager/download/%'] = array(
+    'page callback' => 'download_action',
+    'page arguments' => array(2),
+    'access callback' => true,
+    'type' => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme()
+ */
+function filemanager_theme() {
+  return array(
+    'file_list' => array(
+      'template' => 'file_list',
+      'arguments' => array(
+        'form' => NULL,
+        'get' => NULL
+      )
+    ),
+  );
+}
+
+/**
+ * Implements hook_init()
+ */
+function filemanager_init() {
+  require_once 'sites/all/includes/common.inc';
+  drupal_add_js('misc/jquery.js');
+  drupal_add_js('sites/all/js/ajaxfileupload.js');
+  drupal_add_js(drupal_get_path('module', 'filemanager') . '/js/filemanager.js');
+}
+
+
+function filemanager_check_access() {
+  return TRUE;
+}
+
+
+
+function get_disk_files() {
+  $output = theme('file_list');
+  return $output;
+}
+
+function download_action($filename) {
+  global $base_upload_dir;
+  $filepath = $base_upload_dir . $filename;
+
+  if ($filename && file_exists($filepath)){
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header("Content-Type: application/force-download;charset=utf-8");//强制浏览器下载
+    header('Content-Transfer-Encoding: binary');
+    header('Content-Type: application/zip');
+    header("Content-Disposition: attachment; filename=" . $filename); //重命名文件
+
+    ob_end_clean();
+    readfile($filepath);
+  } else{
+    echo $filepath  .  mt_rand();
+  }
+}
+
+
+/*
+ *
+*/
+function fileupload_form() {
+  $form = array();
+
+  $form['#method'] = 'post';
+  // $form['#action'] = url('uploadfiles/filelist');
+
+  $form['#attributes'] = array('enctype' => "multipart/form-data"); // Not necessary for D7.
+
+  $form['file_name'] = array(
+    '#type' => 'textfield',
+    '#id' => 'file_name',
+    '#title' => t('File Name'),
+  );
+
+  $form['attach'] = array(
+    '#type' => 'file',
+    '#title' => t('Upload File'),
+    '#id' => 'attach_id',
+    '#name' => 'attach_name',
+    '#size' => 60,'#suffix' => '<p id="uploadmsg"></p><img id="loading" style="display:none;" src="'.url('sites/all/image/loading.gif') . '"></div>',
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Upload'),
+    '#attributes' => array('onclick' => 'loadingImage("loading");ajaxFileUpload("attach_id");return false' ),
+  );
+
+  return $form;
+}
+
+
+
+/*
+ * hook_form_validate
+*/
+function fileupload_form_validate(&$form, &$form_state) {
+
+  //  if(empty($form_state['upload'])) {
+  //    form_set_error('upload', t('File missing for upload.')); // t()
+  //  }
+}
+
+
+
+/*
+ * hook_form_submit
+*/
+function fileupload_form_submit(&$form, &$form_state) {
+
+  //  $validators = array();
+  ////  $file = file_save_upload('upload', $validators, file_directory_path());
+  //  global $base_upload_dir;
+  //  $file = file_save_upload('upload', $validators, $base_upload_dir, FALSE);
+  //
+  //  if($file!= 0 ) {
+  //    drupal_set_message(t('Uploaded File successfully.'));
+  //  }  else {
+  //    drupal_set_message(t('The attched file failed to upload. Please try again'));
+  //  }
+  //  file_set_status($file, FILE_STATUS_PERMANENT);
+
+}
+
+
+
+/**
+ * ajax upload file
+ *
+ * @global <type> $base_upload_dir
+ */
+function ajax_file_upload() {
+  global $base_upload_dir;
+  if(!is_dir($base_upload_dir)) {
+    mkdir($base_upload_dir,0755 ,true);
+  }
+
+  $source = $_FILES['attach_name']['tmp_name'];
+  $target = $_FILES['attach_name']['name'] ;
+
+  if ($target && file_exists($base_upload_dir . $target)) {
+    $msg = '<font color="#FF0000"> Upload Failed : file already exists. <font>';
+  } else if( move_uploaded_file($source , $base_upload_dir . $target) ) {
+    $msg = '<font color="#33a333"> Upload Success.<font>';
+  } else {
+    $msg = '<font color="#FF0000"> UThere was an error uploading the file, please try again! <font>';
+    $debug = '$_FILES : ' .json_encode($_FILES)
+    . ' max_execution_time = ' . ini_get('max_execution_time')
+    . ' memory_limit = ' . ini_get('memory_limit')
+    . ' post_max_size = ' . ini_get('post_max_size')
+    . ' upload_max_filesize = ' . ini_get('upload_max_filesize');
+    //  echo json_encode(array('result' => $result ,'msg' => $msg , 'debug' => $debug ));
+  }
+
+  echo $msg ;
+  exit;
+}
+
+
+
+function get_allfiles($path,&$files) {
+  if(is_dir($path)) {
+    $dp = dir($path);
+    while ($file = $dp ->read()) {
+      if($file !="." && $file !="..") {
+        get_allfiles($path."/".$file, $files);
+      }
+    }
+    $dp ->close();
+  }
+  if(is_file($path)) {
+    $files[] =  $path;
+  }
+}
+
+function get_filenamesbydir($dir) {
+  $files =  array();
+  get_allfiles($dir,$files);
+  return $files;
+}
+
+
+
+
+function filemanager_preprocess_file_list(&$vars) {
+  $form = fileupload_form();
+
+  $html = '<form accept-charset="UTF-8" method="POST" enctype="multipart/form-data">';
+  $html .= drupal_render($form['file_name']);
+  $html .= drupal_render($form['attach']);
+  $html .= drupal_render($form['submit']);
+  $html .= '</form>';
+
+  $rows = get_diskfiles_in_dir();
+
+  //header
+  $header = array(
+    array('data' => t('File name')),
+    array('data' => t('File path')),
+    array('data' => t('File size')),
+    array('data' => t('Upload time')),
+  );
+
+  $html .= theme('table', $header, $rows);
+
+  $vars['html'] = $html ;
+
+  //  $deviceType = $_POST ['sel_device_type'];
+  //  $vars ['deviceType'] = $deviceType;
+
+  //  global $base_upload_dir;
+  //
+  //  $vars ['dirs'] = getFilesInDir($baseDir);
+  //  if (!isset($deviceType) && count($vars ['dirs'] > 0)) {
+  //    $deviceType = 'All';
+  //  }
+  //
+  //  if ("All" == $deviceType) {
+  //    $vars ['allVersions'] = getAllFilesInDir($baseDir);
+  //  } else {
+  //    $currentDir = $baseDir . $deviceType;
+  //    $versions = getFilesInDir($currentDir, true);
+  //    $vars ['versions'] = $versions;
+  //  }
+
+}
+
+
+//获取某目录下所有文件、目录名（不包括子目录下文件、目录名）
+function get_diskfiles_in_dir() {
+  global $base_upload_dir;
+  $handler = opendir($base_upload_dir);
+
+  $files= array();
+  
+
+  while (($filename = readdir($handler)) !== false) {
+    if ($filename != "." && $filename != "..") {
+      $filepath = $base_upload_dir.'/'.$filename;
+      $filesize = convert_to_readable_filesize(filesize($filepath));
+      $timestamp = filectime($filepath);
+      $isdir = is_dir($filepath) ? 'dir' : 'file';
+
+      $files[] = array(
+        $filename, $isdir, $filesize, date("Y-m-d H:i:s",$timestamp)
+      );
+    }
+  }
+  closedir($handler);
+
+  sort($files);
+
+  return $files;
+}
+
+function getAllFilesInDir($dir) {
+  $allDirs = array();
+  $fso = opendir($dir);
+  while ($flist = readdir($fso)) {
+    if ($flist != '.' && $flist != '..') {
+      array_push($allDirs, $flist);
+    }
+  }
+  sort($allDirs);
+  closedir($fso);
+
+  $result = array();
+  foreach ($allDirs as $flist) {
+    $dirs = getFilesInDir($dir . '/' . $flist, true);
+    array_push($result, array(
+        $flist => $dirs
+      ));
+  }
+  return $result;
+}
+
+
+function endsWith($string1, $string2) {
+  if (strlen($string1) < strlen($string2)) {
+    return false;
+  } else {
+    return !substr_compare($string1, $string2, strlen($string1) - strlen($string2), strlen($string2));
+  }
+}

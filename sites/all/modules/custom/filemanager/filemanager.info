@@ -1,0 +1,5 @@
+; $Id$
+name = Web File Manager
+description = Web File Manager
+core = 6.x
+package = Pro Drupal Development
