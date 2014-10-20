@@ -85,7 +85,10 @@ function commodity_check_access() {
   return TRUE;
 }
 
+function commodities(){
 
+  return "commodities";
+}
 
 function commodities_management() {
   $output = theme('management');

@@ -46,6 +46,13 @@ function filemanager_theme() {
         'get' => NULL
       )
     ),
+    'fileupload_form' => array(
+      'template' => 'fileupload_form',
+      'arguments' => array(
+        'form' => NULL,
+        'get' => NULL
+      )
+    ),
   );
 }
 
@@ -75,7 +82,7 @@ function download_action($filename) {
   global $base_upload_dir;
   $filepath = $base_upload_dir . $filename;
 
-  if ($filename && file_exists($filepath)){
+  if ($filename && file_exists($filepath)) {
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
     header("Content-Type: application/force-download;charset=utf-8");//强制浏览器下载
@@ -85,7 +92,7 @@ function download_action($filename) {
 
     ob_end_clean();
     readfile($filepath);
-  } else{
+  } else {
     echo $filepath  .  mt_rand();
   }
 }
@@ -121,6 +128,8 @@ function fileupload_form() {
     '#value' => t('Upload'),
     '#attributes' => array('onclick' => 'loadingImage("loading");ajaxFileUpload("attach_id");return false' ),
   );
+
+  $form['#theme'] = array('fileupload_form');
 
   return $form;
 }
@@ -181,10 +190,10 @@ function ajax_file_upload() {
   } else {
     $msg = '<font color="#FF0000"> UThere was an error uploading the file, please try again! <font>';
     $debug = '$_FILES : ' .json_encode($_FILES)
-    . ' max_execution_time = ' . ini_get('max_execution_time')
-    . ' memory_limit = ' . ini_get('memory_limit')
-    . ' post_max_size = ' . ini_get('post_max_size')
-    . ' upload_max_filesize = ' . ini_get('upload_max_filesize');
+      . ' max_execution_time = ' . ini_get('max_execution_time')
+      . ' memory_limit = ' . ini_get('memory_limit')
+      . ' post_max_size = ' . ini_get('post_max_size')
+      . ' upload_max_filesize = ' . ini_get('upload_max_filesize');
     //  echo json_encode(array('result' => $result ,'msg' => $msg , 'debug' => $debug ));
   }
 
@@ -268,7 +277,7 @@ function get_diskfiles_in_dir() {
   $handler = opendir($base_upload_dir);
 
   $files= array();
-  
+
 
   while (($filename = readdir($handler)) !== false) {
     if ($filename != "." && $filename != "..") {
@@ -304,8 +313,8 @@ function getAllFilesInDir($dir) {
   foreach ($allDirs as $flist) {
     $dirs = getFilesInDir($dir . '/' . $flist, true);
     array_push($result, array(
-        $flist => $dirs
-      ));
+      $flist => $dirs
+    ));
   }
   return $result;
 }
