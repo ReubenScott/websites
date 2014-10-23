@@ -1,0 +1,190 @@
+<?php
+
+function investment_menu() {
+
+  $items = array();
+
+  $items['investment'] = array(
+    'title' => 'investment',
+    'page callback' => 'investment_list',
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items ['investment/add'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('investment_form'),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  $items ['investment/save'] = array(
+    'page callback' => 'investment_save',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+
+/**
+ * Implements hook_theme()
+ */
+function investment_theme() {
+  return array(
+    'investment_list' => array(
+      'template' => 'investment_list',
+      'arguments' => array('form' => NULL),
+    ),
+    'investment_form' => array(
+      'template' => 'investment_form',
+      'arguments' => array('form' => NULL),
+    ),
+  );
+}
+
+function investment_list() {
+  drupal_set_title(t('System Administration'));
+  $output = theme('investment_list');
+  return $output;
+}
+
+
+
+
+function investment_preprocess_investment_list(&$vars) {
+  $html = '';
+  //header
+  $header = array(
+    array('data' => t('项目名称'), 'field' => 'item_name'),
+    array('data' => t('投资金额'), 'field' => 'principal'),
+    array('data' => t('担保机构'), 'field' => 'guarantee_institution'),
+    array('data' => t('投资时间'), 'field' => 'investment_time', 'sort' => 'desc'),
+    array('data' => t('年化收益'), 'field' => 'annualized_return'),
+    array('data' => t('到期时间'), 'field' => 'expiration_time'),
+    array('data' => t('回款方式'), 'field' => 'payment_mode'),
+  );
+
+  $query = pager_query("SELECT * FROM investment" . tablesort_sql($header), $limit = 30);
+
+  $rows= array();
+
+  while ($row = db_fetch_array($query)) {
+    $rows[] = array(
+      $row['item_name'],
+      $row['principal'],
+      $row['guarantee_institution'],
+      $row['investment_time'] ? date('Y-m-d', $row['investment_time']): '',
+      $row['annualized_return'], 
+      $row['expiration_time'] ? date('Y-m-d', $row['expiration_time']): '',
+      $row['payment_mode']
+    );
+  }
+
+  $html .= theme('table', $header, $rows);
+  $html .= theme('pager');
+
+  $vars['html'] = $html;
+
+}
+
+function investment_form() {
+  $form['investment_id'] = array(
+    '#type' => 'hidden',
+    '#value' => $id,
+  );
+  $form['item_name'] = array(
+    '#title' => t('项目名称'),
+    '#type' => 'textfield',
+    '#id' => 'item_name',
+    '#required' => TRUE,
+    '#name' => 'item_name',
+    '#attributes' => array('placeholder' => 'Enter investment Name'),
+  );
+  $form['principal'] = array(
+    '#title' => t('投资金额'),
+    '#type' => 'textfield',
+    '#id' => 'principal',
+    '#required' => TRUE,
+    '#name' => 'principal',
+    '#attributes' => array('placeholder' => 'Enter investment Part #'),
+  );
+  $form['guarantee_institution'] = array(
+    '#title' => t('担保机构'),
+    '#type' => 'textfield',
+    '#id' => 'guarantee_institution',
+    '#required' => TRUE,
+    '#name' => 'guarantee_institution',
+    '#attributes' => array('placeholder' => 'Enter guarantee_institution'),
+  );
+  $form['investment_time'] = array(
+    '#title' => t('投资时间'),
+    '#type' => 'textfield',
+    '#id' => 'investment_time',
+    '#required' => TRUE,
+    '#name' => 'investment_time',
+    '#attributes' => array('placeholder' => 'Enter investment Description'),
+  );
+  $form['annualized_return'] = array(
+    '#title' => t('年化收益'),
+    '#type' => 'textfield',
+    '#id' => 'annualized_return',
+    '#name' => 'annualized_return',
+  );
+  //add check box no file
+  $form['expiration_time'] = array(
+    '#title' => t('到期时间'),
+    '#type' => 'textfield',
+    '#name' => 'expiration_time',
+    '#id' => 'expiration_time',
+  );
+  $form['payment_mode'] = array(
+    '#title' => t('回款方式'),
+    '#type' => 'textfield',
+    '#id' => 'payment_mode',
+    '#name' => 'payment_mode',
+  );
+
+  $form['reset'] = array ('#value' => '<input type="reset" value="Reset">');
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+  );
+
+  $form['#action'] = $id ? url('investment/update') : url('investment/save');
+//  $form['#theme'] = array('covidien_investment_form');
+//  $form['#validate'] = array('covidien_investment_form_validate');
+//  $form['#submit'] = array('covidien_investment_form_submit');
+
+  return $form;
+}
+
+
+function investment_preprocess_investment_form(&$vars) {
+  $investment_form = investment_form();
+
+  $vars['investment_form']=  $investment_form ;
+}
+
+function investment_save() {
+  global $drupal_abs_path, $user;
+  $id = $_POST['investment_id'];
+  $item_name = $_POST['item_name'];
+  $principal = $_POST['principal'];
+  $guarantee_institution = $_POST['guarantee_institution'];
+  $investment_time = $_POST['investment_time'];
+  $annualized_return = $_POST['annualized_return'];
+  $expiration_time = $_POST['expiration_time'];
+  $payment_mode = $_POST['payment_mode'];
+
+  $investment_time = time();
+  $expiration_time = time();
+
+  $insert_investment_sql = "INSERT INTO {investment} (item_name, principal, guarantee_institution, investment_time, annualized_return, expiration_time, payment_mode)
+		VALUES ('%s', %f, '%s', %d, %f, %d, '%s')";
+  db_query($insert_investment_sql, $item_name, $principal, $guarantee_institution, $investment_time, $annualized_return, $expiration_time, $payment_mode);
+
+  $message = t('investment @name has been created. ', array('@name' => $item_name));
+
+  drupal_set_message($message);
+  drupal_goto('investment');
+}

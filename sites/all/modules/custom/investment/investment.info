@@ -1,0 +1,5 @@
+; $Id$
+name = investment
+description = "investment"
+package = Pro Drupal Development
+core = 6.x

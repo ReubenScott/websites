@@ -1,0 +1,76 @@
+<?php
+
+// $Id$
+
+
+/**
+ * Implementation of hook_install().
+ */
+function investment_install() {
+  drupal_install_schema('investment');
+}
+
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function investment_uninstall() {
+  drupal_uninstall_schema('investment');
+}
+
+
+/**
+ * Implementation of hook_schema().
+ */
+function investment_schema() {
+  $schema['investment'] = array(
+    'description' => t("Investment"),
+    'fields' => array(
+      'id' => array(
+       'type' => 'serial',
+       'unsigned' => TRUE,
+       'not null' => TRUE,
+      ),
+      'item_name' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'description' => t('项目名称'),
+      ),
+      'principal' => array(
+        'type' => 'float',
+        'size' => 'normal',
+        'description' => t('投资金额'),
+      ),
+      'guarantee_institution' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'description' => t('担保机构'),
+      ),
+      'investment_time' => array(
+       'type' => 'int',
+       'size' => 'normal',
+       'not null' => FALSE,
+       'description' => t('投资时间'),
+      ),
+      'annualized_return' => array(
+        'type' => 'float',
+        'size' => 'normal',
+       'description' => t('年化收益'),
+      ),
+      'expiration_time' => array(
+       'type' => 'int',
+       'size' => 'normal',
+       'not null' => FALSE,
+       'description' => t('到期时间'),
+      ),
+      'payment_mode' => array(
+        'type' => 'varchar',
+        'length' => 128,
+       'description' => t('回款方式'),
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}
+
