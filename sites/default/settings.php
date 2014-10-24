@@ -273,9 +273,9 @@ ini_set('display_startup_errors', TRUE);
  /**
  * File repositary
  */
-global $upload_file_path;
+global $base_upload_dir;
 
-$upload_file_path = 'sites/default/files/WebFM/';
+$base_upload_dir = 'sites/default/files/WebFM/';
 
  
 

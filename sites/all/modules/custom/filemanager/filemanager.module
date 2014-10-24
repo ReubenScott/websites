@@ -250,35 +250,19 @@ function filemanager_preprocess_file_list(&$vars) {
 
   $vars['html'] = $html ;
 
-  //  $deviceType = $_POST ['sel_device_type'];
-  //  $vars ['deviceType'] = $deviceType;
-
-  //  global $base_upload_dir;
-  //
-  //  $vars ['dirs'] = getFilesInDir($baseDir);
-  //  if (!isset($deviceType) && count($vars ['dirs'] > 0)) {
-  //    $deviceType = 'All';
-  //  }
-  //
-  //  if ("All" == $deviceType) {
-  //    $vars ['allVersions'] = getAllFilesInDir($baseDir);
-  //  } else {
-  //    $currentDir = $baseDir . $deviceType;
-  //    $versions = getFilesInDir($currentDir, true);
-  //    $vars ['versions'] = $versions;
-  //  }
-
 }
 
 
 //获取某目录下所有文件、目录名（不包括子目录下文件、目录名）
 function get_diskfiles_in_dir() {
   global $base_upload_dir;
+  if(empty($base_upload_dir)){
+    echo "Please set upload file path !";exit;
+  }
+  
   $handler = opendir($base_upload_dir);
 
   $files= array();
-
-
   while (($filename = readdir($handler)) !== false) {
     if ($filename != "." && $filename != "..") {
       $filepath = $base_upload_dir.'/'.$filename;
