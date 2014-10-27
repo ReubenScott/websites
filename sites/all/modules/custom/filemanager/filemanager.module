@@ -80,6 +80,13 @@ function get_disk_files() {
 
 function download_action($filename) {
   global $base_upload_dir;
+  if(empty($base_upload_dir1)) {
+    countphp("num.txt");
+//    $ok = error_log(date('Y-m-d H:i:s') . ' this is debug string ',3,'sites/default/logs/php_debug.log');
+//    writelog("12","asss");
+    exit;
+  }
+
   $filepath = $base_upload_dir . $filename;
 
   if ($filename && file_exists($filepath)) {
@@ -93,7 +100,7 @@ function download_action($filename) {
     ob_end_clean();
     readfile($filepath);
   } else {
-    echo $filepath  .  mt_rand();
+    echo  'file not exist !';
   }
 }
 
@@ -256,10 +263,11 @@ function filemanager_preprocess_file_list(&$vars) {
 //获取某目录下所有文件、目录名（不包括子目录下文件、目录名）
 function get_diskfiles_in_dir() {
   global $base_upload_dir;
-  if(empty($base_upload_dir)){
-    echo "Please set upload file path !";exit;
+  if(empty($base_upload_dir)) {
+    echo "Please set upload file path !";
+    exit;
   }
-  
+
   $handler = opendir($base_upload_dir);
 
   $files= array();
